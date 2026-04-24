@@ -75,7 +75,7 @@ Verify: Ensure restaurant.pkl and restaurant1.csv have successfully generated in
 
 4. Run the Application
 Start the local server by executing the main Flask application:
-```python app1.py
+``` python app1.py
 ```
 
 5. Access the Interface
