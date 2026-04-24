@@ -47,7 +47,7 @@ Restaurant_Recommendation_System/
 │
 └── README.md
 ```
-⚙️ Installation & Setup
+## ⚙️ Installation & Setup
 Important Note regarding File Sizes: Due to GitHub's 100MB file limit, the raw zomato.csv dataset and the pre-computed restaurant.pkl matrix are not included in this repository. Follow the steps below to generate them locally.
 
 1. Clone the Repository & Install Dependencies
