@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartDining AI — Restaurant Recommendation System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="index-page">
+
+<nav id="main-nav" class="transparent">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">✦</div>
+      <div class="nav-logo-name">
+        <span class="nav-logo-text">SmartDining</span>
+        <span class="nav-logo-ai">AI</span>
+      </div>
+    </a>
+    <div class="nav-center">
+      <a class="nav-item" href="#features">Features</a>
+      <a class="nav-item" href="#howitworks">How It Works</a>
+      <a class="nav-item" href="#about">About</a>
+    </div>
+    <div class="nav-right">
+     <!-- <a class="nav-ghost" href="/web">🔍 Search</a> -->
+      <a class="nav-cta" href="/web">✦ Launch Engine</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-dot"></div>
+  <div class="hero-orb orb-tr"></div>
+  <div class="hero-orb orb-bl"></div>
+  <div class="hero-orb orb-c"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="h-badge">
+        <span class="h-badge-dot"></span>
+        AI-Powered Restaurant Intelligence
+        <span style="color:#C7D2FE">·</span>
+        ML v2.4
+      </div>
+      <h1>Discover restaurants<br/>you'll <span class="h1-grad">truly love</span></h1>
+      <p class="hero-sub">
+        Our ML engine analyzes millions of review signals using <strong>TF-IDF vectorization</strong>
+        and <strong>cosine similarity</strong> to surface restaurants that match your exact taste profile — in under 200 ms.
+      </p>
+      <div class="hero-ctas">
+        <a href="/web" class="btn-primary">✦ Launch Inference Engine →</a>
+        <button onclick="openSampleModal()" class="btn-outline">View Sample Results ›</button>
+      </div>
+      <div class="trust-row">
+        <div class="avatar-stack">
+          <img src="https://i.pravatar.cc/32?img=1" alt=""/><img src="https://i.pravatar.cc/32?img=5" alt=""/>
+          <img src="https://i.pravatar.cc/32?img=9" alt=""/><img src="https://i.pravatar.cc/32?img=11" alt=""/>
+        </div>
+        <div class="trust-divider"></div>
+        <div>
+          <div class="stars-sm" style="margin-bottom:3px">
+            <span class="star-y">★</span><span class="star-y">★</span><span class="star-y">★</span>
+            <span class="star-y">★</span><span class="star-y">★</span>
+            <span style="font-size:13px;font-weight:700;color:#0F172A;margin-left:4px">4.9</span>
+          </div>
+          <p class="trust-txt">Trusted by <strong>50,000+</strong> food enthusiasts</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div style="position:relative;width:100%">
+        <div class="hero-img-wrap">
+          <img src="https://images.unsplash.com/photo-1761208229358-3cd53fcfa70d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900" alt="Fine dining interior"/>
+          <div class="hero-img-overlay"></div>
+          <div class="cuisine-tags">
+            <span class="ctag">Italian</span><span class="ctag">Asian Fusion</span>
+            <span class="ctag">Contemporary</span><span class="ctag">Fine Dining</span>
+          </div>
+          <div class="loc-chip">📍 Bangalore, India</div>
+        </div>
+        <div class="infer-card" id="infer-card">
+          <div class="ic-header">
+            <div class="ic-title-row">
+              <div class="ic-icon">🧠</div>
+              <span class="ic-title">Live Similarity Analysis</span>
+            </div>
+            <div class="ic-live"><span class="ic-live-dot"></span> Active</div>
+          </div>
+          <div class="ic-query">
+            <span>✦</span><span class="ql">Query:</span><span class="qv">Jalsa</span>
+            <span class="qt">⚡ 142ms</span>
+          </div>
+          <div class="ic-bar">
+            <div class="ic-bar-hd"><div><span class="ic-rank">#1</span><span class="ic-name">Onesta</span></div><span class="ic-pct">96.3%</span></div>
+            <div class="ic-track"><div class="ic-fill" data-w="96.3"></div></div>
+          </div>
+          <div class="ic-bar">
+            <div class="ic-bar-hd"><div><span class="ic-rank">#2</span><span class="ic-name">Smoke House Deli</span></div><span class="ic-pct">91.8%</span></div>
+            <div class="ic-track"><div class="ic-fill" data-w="91.8"></div></div>
+          </div>
+          <div class="ic-bar">
+            <div class="ic-bar-hd"><div><span class="ic-rank">#3</span><span class="ic-name">The Fatty Bao</span></div><span class="ic-pct">87.4%</span></div>
+            <div class="ic-track"><div class="ic-fill" data-w="87.4"></div></div>
+          </div>
+          <p class="ic-caption">12,487 candidates · TF-IDF Model v2.4</p>
+        </div>
+        <div class="badge-acc">
+          <div class="badge-acc-icon">🏆</div>
+          <div><div class="badge-acc-num">94.7%</div><div class="badge-acc-sub">Match Accuracy</div></div>
+        </div>
+        <div class="badge-spd">
+          <div class="badge-spd-icon">⚡</div>
+          <div><div class="badge-spd-num">&lt;200ms</div><div class="badge-spd-sub">Inference Time</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-fade"></div>
+</section>
+
+<section class="stats-section">
+  <div class="stats-inner">
+    <div class="stat-cell" data-anim="up">
+      <div class="stat-icon" style="background:rgba(79,70,229,.08);border:1.5px solid rgba(79,70,229,.12)">🗄️</div>
+      <div><div class="stat-num">12,487</div><div class="stat-lbl">Restaurants Indexed</div></div>
+    </div>
+    <div class="stat-cell" data-anim="up" data-delay="1">
+      <div class="stat-icon" style="background:rgba(124,58,237,.08);border:1.5px solid rgba(124,58,237,.12)">📊</div>
+      <div><div class="stat-num">2.3M+</div><div class="stat-lbl">Reviews Analyzed</div></div>
+    </div>
+    <div class="stat-cell" data-anim="up" data-delay="2">
+      <div class="stat-icon" style="background:rgba(5,150,105,.08);border:1.5px solid rgba(5,150,105,.12)">🛡️</div>
+      <div><div class="stat-num">94.7%</div><div class="stat-lbl">Match Accuracy</div></div>
+    </div>
+    <div class="stat-cell" data-anim="up" data-delay="3" style="border-right:none">
+      <div class="stat-icon" style="background:rgba(217,119,6,.08);border:1.5px solid rgba(217,119,6,.12)">⚡</div>
+      <div><div class="stat-num">&lt;200ms</div><div class="stat-lbl">Avg. Inference Time</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#FAFBFF">
+  <div class="s-inner">
+    <div class="s-head">
+      <div data-anim="up"><span class="s-badge">Under the Hood</span></div>
+      <h2 class="s-title" data-anim="up" data-delay="1">The inference pipeline, visualised</h2>
+      <p class="s-sub" data-anim="up" data-delay="2">Five stages — from a single restaurant name to a curated ranked list — completed in under 200 milliseconds.</p>
+    </div>
+    <div class="pipeline-flow">
+      <div class="pipe-step" data-anim="up" data-delay="1">
+        <div class="pipe-card" onmouseenter="this.style.boxShadow='0 8px 28px rgba(99,102,241,.12)';this.style.borderColor='rgba(99,102,241,.2)'" onmouseleave="this.style.boxShadow='0 2px 10px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="pipe-icon" style="background:rgba(99,102,241,.1);border:1.5px solid rgba(99,102,241,.15)">📄</div>
+            <span class="pipe-step-num" style="color:#6366F1">01</span>
+          </div>
+          <div class="pipe-label">Raw Input</div>
+          <div class="pipe-desc">Restaurant name as seed query</div>
+        </div>
+        <div class="pipe-arrow">›</div>
+      </div>
+      <div class="pipe-step" data-anim="up" data-delay="2">
+        <div class="pipe-card" onmouseenter="this.style.boxShadow='0 8px 28px rgba(124,58,237,.12)';this.style.borderColor='rgba(124,58,237,.2)'" onmouseleave="this.style.boxShadow='0 2px 10px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="pipe-icon" style="background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.15)">💻</div>
+            <span class="pipe-step-num" style="color:#7C3AED">02</span>
+          </div>
+          <div class="pipe-label">TF-IDF Encode</div>
+          <div class="pipe-desc">287,659-dim sparse vector</div>
+        </div>
+        <div class="pipe-arrow">›</div>
+      </div>
+      <div class="pipe-step" data-anim="up" data-delay="3">
+        <div class="pipe-card" onmouseenter="this.style.boxShadow='0 8px 28px rgba(139,92,246,.12)';this.style.borderColor='rgba(139,92,246,.2)'" onmouseleave="this.style.boxShadow='0 2px 10px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="pipe-icon" style="background:rgba(139,92,246,.1);border:1.5px solid rgba(139,92,246,.15)">⬡</div>
+            <span class="pipe-step-num" style="color:#8B5CF6">03</span>
+          </div>
+          <div class="pipe-label">Vector Space</div>
+          <div class="pipe-desc">Cosine distance computation</div>
+        </div>
+        <div class="pipe-arrow">›</div>
+      </div>
+      <div class="pipe-step" data-anim="up" data-delay="4">
+        <div class="pipe-card" onmouseenter="this.style.boxShadow='0 8px 28px rgba(99,102,241,.12)';this.style.borderColor='rgba(99,102,241,.2)'" onmouseleave="this.style.boxShadow='0 2px 10px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="pipe-icon" style="background:rgba(99,102,241,.1);border:1.5px solid rgba(99,102,241,.15)">📈</div>
+            <span class="pipe-step-num" style="color:#6366F1">04</span>
+          </div>
+          <div class="pipe-label">Similarity Sort</div>
+          <div class="pipe-desc">Ranked by angular closeness</div>
+        </div>
+        <div class="pipe-arrow">›</div>
+      </div>
+      <div class="pipe-step" data-anim="up" data-delay="5">
+        <div class="pipe-card" onmouseenter="this.style.boxShadow='0 8px 28px rgba(79,70,229,.12)';this.style.borderColor='rgba(79,70,229,.2)'" onmouseleave="this.style.boxShadow='0 2px 10px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="pipe-icon" style="background:rgba(79,70,229,.1);border:1.5px solid rgba(79,70,229,.15)">🎯</div>
+            <span class="pipe-step-num" style="color:#4F46E5">05</span>
+          </div>
+          <div class="pipe-label">Top-10 Results</div>
+          <div class="pipe-desc">Metadata-enriched recommendations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features" style="background:#fff">
+  <div class="s-inner">
+    <div class="s-head">
+      <div data-anim="up"><span class="s-badge">The Intelligence Behind</span></div>
+      <h2 class="s-title" data-anim="up" data-delay="1">Powered by cutting-edge ML</h2>
+      <p class="s-sub" data-anim="up" data-delay="2">A three-stage pipeline that transforms raw review text into precise, personalised dining recommendations.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card" data-anim="up" data-delay="1"
+        onmouseenter="this.style.boxShadow='0 16px 48px rgba(79,70,229,.18)';this.style.borderColor='rgba(79,70,229,.15)'"
+        onmouseleave="this.style.boxShadow='0 2px 12px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+        <div class="feat-num-row">
+          <div class="feat-icon-box" style="background:#EEF2FF">🧠</div>
+          <span class="feat-num-txt">01</span>
+        </div>
+        <div class="feat-bars">
+          <div class="feat-bar" style="height:44px;background:rgba(79,70,229,.8);transition-delay:.0s"></div>
+          <div class="feat-bar" style="height:37px;background:rgba(79,70,229,.67);transition-delay:.05s"></div>
+          <div class="feat-bar" style="height:31px;background:rgba(79,70,229,.33);transition-delay:.10s"></div>
+          <div class="feat-bar" style="height:42px;background:rgba(79,70,229,.55);transition-delay:.15s"></div>
+          <div class="feat-bar" style="height:26px;background:rgba(79,70,229,.33);transition-delay:.20s"></div>
+          <div class="feat-bar" style="height:34px;background:rgba(79,70,229,.44);transition-delay:.25s"></div>
+          <div class="feat-bar" style="height:40px;background:rgba(79,70,229,.52);transition-delay:.30s"></div>
+        </div>
+        <div class="feat-subtitle" style="color:rgba(79,70,229,.6)">Semantic Text Encoding</div>
+        <div class="feat-title">TF-IDF Vectorization</div>
+        <p class="feat-desc">Every customer review is decomposed into high-dimensional TF-IDF vectors, capturing the frequency and importance of each culinary term across the entire corpus of 12,487 venues.</p>
+      </div>
+      <div class="feat-card" data-anim="up" data-delay="2"
+        onmouseenter="this.style.boxShadow='0 16px 48px rgba(124,58,237,.18)';this.style.borderColor='rgba(124,58,237,.15)'"
+        onmouseleave="this.style.boxShadow='0 2px 12px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+        <div class="feat-num-row">
+          <div class="feat-icon-box" style="background:#F5F3FF">🔀</div>
+          <span class="feat-num-txt">02</span>
+        </div>
+        <div class="feat-bars">
+          <div class="feat-bar" style="height:46px;background:rgba(124,58,237,.8);transition-delay:.0s"></div>
+          <div class="feat-bar" style="height:44px;background:rgba(124,58,237,.67);transition-delay:.05s"></div>
+          <div class="feat-bar" style="height:42px;background:rgba(124,58,237,.55);transition-delay:.10s"></div>
+          <div class="feat-bar" style="height:40px;background:rgba(124,58,237,.52);transition-delay:.15s"></div>
+          <div class="feat-bar" style="height:38px;background:rgba(124,58,237,.49);transition-delay:.20s"></div>
+          <div class="feat-bar" style="height:36px;background:rgba(124,58,237,.46);transition-delay:.25s"></div>
+          <div class="feat-bar" style="height:33px;background:rgba(124,58,237,.42);transition-delay:.30s"></div>
+        </div>
+        <div class="feat-subtitle" style="color:rgba(124,58,237,.6)">Angular Distance Matching</div>
+        <div class="feat-title">Cosine Similarity</div>
+        <p class="feat-desc">Restaurants are matched by computing the angular distance between review vectors in N-dimensional space, surfacing semantically similar dining profiles with high precision.</p>
+      </div>
+      <div class="feat-card" data-anim="up" data-delay="3"
+        onmouseenter="this.style.boxShadow='0 16px 48px rgba(8,145,178,.18)';this.style.borderColor='rgba(8,145,178,.15)'"
+        onmouseleave="this.style.boxShadow='0 2px 12px rgba(15,23,42,.04)';this.style.borderColor='#F1F5F9'">
+        <div class="feat-num-row">
+          <div class="feat-icon-box" style="background:#ECFEFF">🎯</div>
+          <span class="feat-num-txt">03</span>
+        </div>
+        <div class="feat-bars">
+          <div class="feat-bar" style="height:47px;background:rgba(8,145,178,.8);transition-delay:.0s"></div>
+          <div class="feat-bar" style="height:45px;background:rgba(8,145,178,.67);transition-delay:.05s"></div>
+          <div class="feat-bar" style="height:43px;background:rgba(8,145,178,.55);transition-delay:.10s"></div>
+          <div class="feat-bar" style="height:41px;background:rgba(8,145,178,.49);transition-delay:.15s"></div>
+          <div class="feat-bar" style="height:38px;background:rgba(8,145,178,.44);transition-delay:.20s"></div>
+          <div class="feat-bar" style="height:36px;background:rgba(8,145,178,.37);transition-delay:.25s"></div>
+          <div class="feat-bar" style="height:32px;background:rgba(8,145,178,.32);transition-delay:.30s"></div>
+        </div>
+        <div class="feat-subtitle" style="color:rgba(8,145,178,.6)">Top-K Recommendation Engine</div>
+        <div class="feat-title">Precision Ranking</div>
+        <p class="feat-desc">Results are ranked using a composite similarity score, returning the top 10 closest matches with full transparency on why each recommendation was surfaced.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dataset-section" style="background:#F8FAFC">
+  <div class="s-inner">
+    <div class="s-head">
+      <div data-anim="up"><span class="s-badge">The Data Behind</span></div>
+      <h2 class="s-title" data-anim="up" data-delay="1">12,487 restaurants,<br/>one unified corpus</h2>
+      <p class="s-sub" data-anim="up" data-delay="2">Every venue is indexed as a TF-IDF vector. Browse a slice of the corpus — each card is one data point that powers your recommendations.</p>
+    </div>
+  </div>
+  <div class="mq-row"><div class="mq-fade-l"></div><div class="mq-fade-r"></div>
+    <div class="mq-track go-left" id="mq1"></div>
+  </div>
+  <div class="mq-row"><div class="mq-fade-l"></div><div class="mq-fade-r"></div>
+    <div class="mq-track go-right" id="mq2"></div>
+  </div>
+  <div class="pill-strip" data-anim="up">
+    <span class="pill-lbl">TF-IDF input features</span>
+    <span class="pill-field">name</span><span class="pill-field">cuisines</span>
+    <span class="pill-field">rate</span><span class="pill-field">votes</span><span class="pill-field">cost(for 2)</span>
+    <span style="color:#CBD5E1;font-size:14px">→</span>
+    <span class="pill-dims">287,659 vector dimensions</span>
+  </div>
+</section>
+
+<section class="section" id="howitworks" style="background:#fff">
+  <div class="s-inner">
+    <div class="hiw-grid">
+      <div data-anim="left">
+        <div class="hiw-img-wrap">
+          <img src="https://images.unsplash.com/photo-1773333155314-cbfb5f6d4dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800" alt="Gourmet food"/>
+          <div class="hiw-loc">📍 Bangalore, India</div>
+          <div class="hiw-result-card">
+            <div class="hiw-rch">
+              <div class="hiw-rch-rank">01</div>
+              <span class="hiw-rch-name">Onesta</span>
+              <span class="hiw-rch-pct">96.3%</span>
+            </div>
+            <div class="hiw-chips">
+              <span class="hiw-chip">Italian</span><span class="hiw-chip">Pizza</span><span class="hiw-chip">Continental</span>
+            </div>
+            <div class="hiw-meta">
+              <div class="hiw-stars">
+                <span style="color:#F59E0B">★</span><span style="color:#F59E0B">★</span><span style="color:#F59E0B">★</span>
+                <span style="color:#F59E0B">★</span><span style="color:#E5E7EB">★</span>
+              </div>
+              4.5 · ₹600
+            </div>
+            <div class="hiw-bar-track"><div class="hiw-bar-fill" id="hiw-fill"></div></div>
+          </div>
+        </div>
+      </div>
+      <div data-anim="right">
+        <span class="s-badge" style="margin-bottom:20px;display:inline-block">The Process</span>
+        <h2 class="s-title" style="text-align:left;margin-bottom:12px">Three steps to precision</h2>
+        <p class="s-sub" style="text-align:left;margin:0 0 40px">From a single restaurant name to a curated list of 10 perfect matches — in under 200 milliseconds.</p>
+        <div class="steps">
+          <div class="step-row">
+            <div class="step-icon-col"><div class="step-icon">✦</div><div class="step-line"></div></div>
+            <div class="step-body">
+              <div class="step-num">STEP 01</div>
+              <div class="step-title">Enter Your Target</div>
+              <p class="step-desc">Type any restaurant name into the Inference Engine. Our vectorizer uses it as the seed for similarity computation.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-icon-col"><div class="step-icon">🧠</div><div class="step-line"></div></div>
+            <div class="step-body">
+              <div class="step-num">STEP 02</div>
+              <div class="step-title">Model Runs Inference</div>
+              <p class="step-desc">The TF-IDF model encodes your target's review corpus and computes cosine similarity against all 12,487 indexed restaurants.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-icon-col"><div class="step-icon">🎯</div></div>
+            <div class="step-body">
+              <div class="step-num">STEP 03</div>
+              <div class="step-title">Receive Ranked Results</div>
+              <p class="step-desc">Get a precision-ranked list of the top 10 most similar restaurants with full metadata — cuisines, ratings, cost, and match score.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#F8FAFC">
+  <div class="s-inner">
+    <div class="s-head">
+      <div data-anim="up"><span class="s-badge">What People Say</span></div>
+      <h2 class="s-title" data-anim="up" data-delay="1">Loved by food enthusiasts</h2>
+      <p class="s-sub" data-anim="up" data-delay="2">Thousands of diners trust SmartDining AI to surface their next favourite restaurant every week.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card" data-anim="up" data-delay="1">
+        <div class="testi-quote">❝</div>
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="testi-text">"SmartDining AI discovered restaurants I never would have found on my own. The similarity matching is remarkably accurate — it genuinely understands what I love."</p>
+        <div class="testi-author">
+          <img src="https://i.pravatar.cc/48?img=47" alt="Priya Sharma"/>
+          <div><div class="testi-name">Priya Sharma</div><div class="testi-role">Food Critic · Delhi</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-anim="up" data-delay="2">
+        <div class="testi-quote">❝</div>
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="testi-text">"As a chef, I'm picky about dining. This tool's precision is outstanding — it surfaces places that align with my palate in a way no other tool does."</p>
+        <div class="testi-author">
+          <img src="https://i.pravatar.cc/48?img=33" alt="Rahul Mehta"/>
+          <div><div class="testi-name">Rahul Mehta</div><div class="testi-role">Executive Chef · Bangalore</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-anim="up" data-delay="3">
+        <div class="testi-quote">❝</div>
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="testi-text">"The ML-driven approach is genuinely impressive. It gets recommendations right far more often than any traditional algorithm I've tried."</p>
+        <div class="testi-author">
+          <img src="https://i.pravatar.cc/48?img=5" alt="Ananya Iyer"/>
+          <div><div class="testi-name">Ananya Iyer</div><div class="testi-role">Tech Entrepreneur · Mumbai</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="trust-bar" data-anim="fade">
+      <div class="t-avatars">
+        <img src="https://i.pravatar.cc/28?img=2" alt=""/><img src="https://i.pravatar.cc/28?img=6" alt=""/>
+        <img src="https://i.pravatar.cc/28?img=14" alt=""/><img src="https://i.pravatar.cc/28?img=20" alt=""/>
+        <img src="https://i.pravatar.cc/28?img=25" alt=""/><img src="https://i.pravatar.cc/28?img=30" alt=""/>
+      </div>
+      <div class="stars-sm"><span class="star-y" style="font-size:14px">★</span><span class="star-y" style="font-size:14px">★</span><span class="star-y" style="font-size:14px">★</span><span class="star-y" style="font-size:14px">★</span><span class="star-y" style="font-size:14px">★</span></div>
+      <span class="trust-txt"><strong>50,000+</strong> happy diners</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about" style="background:#fff">
+  <div class="s-inner">
+    <div class="cta-box" data-anim="up">
+      <div class="cta-dotgrid"></div><div class="cta-orb1"></div><div class="cta-orb2"></div>
+      <div class="cta-content">
+        <div>
+          <div class="cta-badge">✨ Ready to explore?</div>
+          <h2 class="cta-title">Discover your next favourite<br/>restaurant today.</h2>
+          <div class="cta-list">
+            <div class="cta-item"><span class="cta-check">✓</span><span>Powered by TF-IDF + Cosine Similarity</span></div>
+            <div class="cta-item"><span class="cta-check">✓</span><span>12,487 restaurants across India indexed</span></div>
+            <div class="cta-item"><span class="cta-check">✓</span><span>Results in under 200ms, every time</span></div>
+          </div>
+        </div>
+        <div class="cta-right">
+          <a href="/web" class="btn-white">✦ Launch Inference Engine →</a>
+          <a href="#features" class="btn-white-outline">Learn how it works</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="fc-left">
+      <span class="fc-logo">✦ SmartDining <b>AI</b></span>
+      <span class="fc-tech">Flask · scikit-learn · Zomato Dataset</span>
+    </div>
+    <div class="fc-right">
+      <span class="fc-dev">
+        Designed & Developed by 
+        <a href="#" target="_blank">Mohamadayan Desai</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<div class="sr-overlay" id="sr-overlay" onclick="handleOverlayClick(event)">
+  <div class="sr-modal">
+    <div class="sr-topbar">
+      <div class="sr-topbar-logo">
+        <div class="sr-topbar-icon">✦</div>
+        <span class="sr-topbar-text">SmartDining</span>
+        <span class="sr-topbar-ai">AI</span>
+        <span class="sr-topbar-pill">› Results Dashboard</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="sr-preview-badge">👁 Sample Preview</div>
+        <a href="/web" class="sr-try-btn" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border-color:transparent;font-weight:700;border-radius:10px;padding:8px 14px">✦ Try Live Engine</a>
+      </div>
+      <button class="sr-close" onclick="closeSampleModal()">✕ Close Preview</button>
+    </div>
+
+    <div class="sr-page">
+      <div class="sr-breadcrumb">
+        <a href="/" style="color:#94A3B8;text-decoration:none">Home</a>
+        <span style="color:#CBD5E1">›</span>
+        <a href="/web" style="color:#94A3B8;text-decoration:none">Inference Engine</a>
+        <span style="color:#CBD5E1">›</span>
+        <span class="sr-bc-active">Results</span>
+      </div>
+
+      <div class="sr-two-col">
+        <div class="sr-sidebar">
+          <div class="sr-query-card">
+            <div class="sr-qc-lbl">🧠 Query Target</div>
+            <div class="sr-qc-name">Jalsa</div>
+            <div class="sr-qc-sub">Seed restaurant for TF-IDF similarity</div>
+            <div class="sr-qc-ft"><span>⚡</span><span>Computed in 160ms</span></div>
+          </div>
+          <div class="sr-metrics">
+            <div class="sr-metric"><div class="sr-metric-val" style="color:#4F46E5">95.7%</div><div class="sr-metric-lbl">Top Match</div></div>
+            <div class="sr-metric"><div class="sr-metric-val" style="color:#7C3AED">81.5%</div><div class="sr-metric-lbl">Avg Match</div></div>
+            <div class="sr-metric"><div class="sr-metric-val" style="color:#D97706">★ 4.45</div><div class="sr-metric-lbl">Avg Rating</div></div>
+            <div class="sr-metric"><div class="sr-metric-val" style="color:#059669">₹1,480</div><div class="sr-metric-lbl">Avg Cost</div></div>
+          </div>
+          <div class="sr-panel">
+            <div class="sr-panel-hd"><span style="font-size:14px;color:#94A3B8">🗄️</span><span class="sr-panel-title">Model Parameters</span></div>
+            <div class="sr-param-row"><span class="sr-param-key">Algorithm</span><span class="sr-param-val">TF-IDF</span></div>
+            <div class="sr-param-row"><span class="sr-param-key">Distance</span><span class="sr-param-val">Cosine Similarity</span></div>
+            <div class="sr-param-row"><span class="sr-param-key">Corpus</span><span class="sr-param-val">12,487 venues</span></div>
+            <div class="sr-param-row"><span class="sr-param-key">Features</span><span class="sr-param-val">287,659 dims</span></div>
+            <div class="sr-param-row"><span class="sr-param-key">Top-K</span><span class="sr-param-val">10 results</span></div>
+            <div class="sr-param-row"><span class="sr-param-key">Inference</span><span class="sr-param-val">160ms</span></div>
+          </div>
+          <div style="border-radius:16px;padding:20px;background:#fff;border:1px solid #F1F5F9;box-shadow:0 2px 12px rgba(15,23,42,0.04)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+              <span style="color:#475569;font-size:11.5px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase">Cuisine Coverage</span>
+            </div>
+            <div id="sr-cuisine-chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+          </div>
+          <a href="/web" class="sr-new-run">✦ New Inference Run</a>
+        </div>
+
+        <div>
+          <div class="sr-results-hd">
+            <div>
+              <div class="sr-title">
+                Top 10 Recommendations
+                <span class="sr-title-badge">✓ for "Jalsa"</span>
+              </div>
+              <p class="sr-meta" id="sr-meta">Sorted by cosine similarity · TF-IDF Model v2.4 · 10 / 12,487 venues</p>
+            </div>
+            <button class="sr-try-btn" onclick="closeSampleModal()">← Back to Home</button>
+          </div>
+          <div class="sr-chart-panel">
+            <div class="sr-chart-hd">
+              <div class="sr-chart-title"><span>📊</span> Cosine Similarity Distribution</div>
+              <span class="sr-chart-hint">rank 1 → 10</span>
+            </div>
+            <div class="sr-bar-chart" id="sr-bar-chart"></div>
+          </div>
+          <div class="sr-sort-toolbar">
+            <span class="sr-sort-lbl">⚙ Sort</span>
+            <button class="sr-sort-btn active" onclick="srSort(this,'similarity')">📊 Match Score ↓</button>
+            <button class="sr-sort-btn" onclick="srSort(this,'rating-desc')">★ Rating ↓</button>
+            <button class="sr-sort-btn" onclick="srSort(this,'rating-asc')">★ Rating ↑</button>
+            <button class="sr-sort-btn" onclick="srSort(this,'cost-asc')">₹ Cost ↑</button>
+            <button class="sr-sort-btn" onclick="srSort(this,'cost-desc')">₹ Cost ↓</button>
+          </div>
+          <div class="sr-cards" id="sr-cards"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ NAVBAR: transparent → frosted on scroll ══════════════════════
+const nav = document.getElementById('main-nav');
+function updateNav(){nav.className=window.scrollY>20?'frosted':'transparent'}
+window.addEventListener('scroll',updateNav,{passive:true});
+updateNav();
+
+// ═══ INTERSECTION OBSERVER for scroll animations ══════════════════
+const aio = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      // Trigger bar chart animations inside feature cards
+      const bars = e.target.querySelectorAll('.feat-bar');
+      if(bars.length) e.target.classList.add('bars-in');
+      aio.unobserve(e.target);
+    }
+  });
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('[data-anim]').forEach(el=>aio.observe(el));
+
+// Observer specifically for HIW bar fill + feature cards with bars
+const fio = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      // HIW bar
+      const fill = document.getElementById('hiw-fill');
+      if(fill) setTimeout(()=>{fill.style.width='96.3%'},200);
+      fio.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+const hiwImg = document.querySelector('.hiw-img-wrap');
+if(hiwImg) fio.observe(hiwImg);
+
+// Feature cards bar animation via separate observer
+const fco = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('bars-in');fco.unobserve(e.target);}
+  });
+},{threshold:0.3});
+document.querySelectorAll('.feat-card').forEach(c=>fco.observe(c));
+
+// ═══ LIVE INFERENCE CARD bars animate on page load ═════════════════
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.querySelectorAll('.ic-fill').forEach((el,i)=>{
+      setTimeout(()=>{el.style.width=el.dataset.w+'%'},400+i*200);
+    });
+  },300);
+});
+
+// ═══ MARQUEE DATA ══════════════════════════════════════════════════
+const CARDS = [
+  {name:'Onesta',rating:4.5,cuisines:'Italian, Pizza',votes:'3,847',cost:'₹600',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'Smoke House Deli',rating:4.4,cuisines:'Continental, European',votes:'5,123',cost:'₹1,100',ratingC:'#D97706',ratingBg:'#FFFBEB',border:'#FCD34D'},
+  {name:'Rameshwaram Cafe',rating:4.6,cuisines:'South Indian, Breakfast',votes:'4,123',cost:'₹300',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'The Fatty Bao',rating:4.3,cuisines:'Asian Fusion, Japanese',votes:'4,392',cost:'₹900',ratingC:'#D97706',ratingBg:'#FFFBEB',border:'#FCD34D'},
+  {name:'Karavalli',rating:4.6,cuisines:'Coastal, Seafood',votes:'2,891',cost:'₹1,500',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'Truffles',rating:4.4,cuisines:'American, Burgers',votes:'6,234',cost:'₹600',ratingC:'#D97706',ratingBg:'#FFFBEB',border:'#FCD34D'},
+  {name:'Punjab Grill',rating:4.1,cuisines:'North Indian, Punjabi',votes:'3,214',cost:'₹1,400',ratingC:'#4F46E5',ratingBg:'#EEF2FF',border:'#C7D2FE'},
+  {name:'MTR',rating:4.5,cuisines:'South Indian, Breakfast',votes:'7,651',cost:'₹250',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'Toit',rating:4.3,cuisines:'Continental, Craft Beer',votes:'5,432',cost:'₹1,200',ratingC:'#D97706',ratingBg:'#FFFBEB',border:'#FCD34D'},
+  {name:'Bayroute',rating:4.5,cuisines:'Lebanese, Mediterranean',votes:'2,143',cost:'₹1,800',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'Social',rating:4.0,cuisines:'Continental, Asian',votes:'6,741',cost:'₹800',ratingC:'#4F46E5',ratingBg:'#EEF2FF',border:'#C7D2FE'},
+  {name:'Corner House',rating:4.5,cuisines:'Ice Cream, Desserts',votes:'9,342',cost:'₹250',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'Shiro',rating:4.3,cuisines:'Asian, Japanese',votes:'2,756',cost:'₹1,600',ratingC:'#D97706',ratingBg:'#FFFBEB',border:'#FCD34D'},
+  {name:'Meghana Foods',rating:4.5,cuisines:'Andhra, Biryani',votes:'4,234',cost:'₹450',ratingC:'#059669',ratingBg:'#ECFDF5',border:'#6EE7B7'},
+  {name:'Olive Bar & Kitchen',rating:4.2,cuisines:'Mediterranean, Italian',votes:'4,087',cost:'₹2,000',ratingC:'#D97706',ratingBg:'#FFFBEB',border:'#FCD34D'},
+  {name:'Barbeque Nation',rating:4.1,cuisines:'North Indian, Barbecue',votes:'8,924',cost:'₹1,200',ratingC:'#4F46E5',ratingBg:'#EEF2FF',border:'#C7D2FE'},
+];
+function makeCard(d){
+  const cuisines=d.cuisines.split(',').map(c=>`<span class="rc-chip">${c.trim()}</span>`).join('');
+  return `<div class="rc" style="border-left:3px solid ${d.border}">
+    <div class="rc-hd"><span class="rc-name">${d.name}</span><span class="rc-rating" style="background:${d.ratingBg};color:${d.ratingC}">★ ${d.rating}</span></div>
+    <div class="rc-cuisines">${cuisines}</div>
+    <div class="rc-ft"><span class="rc-votes">${d.votes} reviews</span><span class="rc-cost">${d.cost}</span></div>
+  </div>`;
+}
+// Row 1: first 8 cards × 2 for seamless loop
+const r1=[...CARDS.slice(0,8),...CARDS.slice(0,8)];
+document.getElementById('mq1').innerHTML=r1.map(makeCard).join('');
+// Row 2: last 8 cards × 2
+const r2=[...CARDS.slice(8),...CARDS.slice(8)];
+document.getElementById('mq2').innerHTML=r2.map(makeCard).join('');
+
+// ═══ SAMPLE RESULTS MODAL ══════════════════════════════════════════
+const SR_BAR_COLORS=['#4F46E5','#5B52E8','#6760EB','#7C6FF0','#8880F2','#9890F4','#A8A0F6','#B8B2F8','#C8C4FA','#D8D4FC'];
+const SR_RANK_STYLES={
+  1:{bg:'#FFFBEB',text:'#92400E',border:'#FCD34D'},
+  2:{bg:'#F8FAFC',text:'#475569',border:'#CBD5E1'},
+  3:{bg:'#FFF7ED',text:'#9A3412',border:'#FDBA74'},
+};
+const SR_DATA=[
+  {rank:1,name:'Biergarten',cuisines:['Continental','European','BBQ','Chinese','Asian'],rating:4.5,cost:1500,similarity:95.7,votes:2143},
+  {rank:2,name:'The Palat',cuisines:['Continental','Mediterranean','Italian','North Indian','Finger Food','Asian','Momos'],rating:4.4,cost:1800,similarity:91.5,votes:4425},
+  {rank:3,name:'Lush Resto-Bar',cuisines:['North Indian','Continental'],rating:4.3,cost:1400,similarity:88.2,votes:8532},
+  {rank:4,name:'Jalsa Gold',cuisines:['North Indian','Mughlai','Biryani'],rating:4.2,cost:1200,similarity:84.9,votes:3214},
+  {rank:5,name:'Salt - Indian Bistro',cuisines:['Indian','Continental','Asian'],rating:4.4,cost:1600,similarity:81.6,votes:2891},
+  {rank:6,name:'Foxtrot',cuisines:['Continental','European','Gastropub'],rating:4.1,cost:1200,similarity:78.3,votes:1943},
+  {rank:7,name:'Deja Vu Restobar',cuisines:['Continental','North Indian','Asian'],rating:4.0,cost:1000,similarity:75.0,votes:2756},
+  {rank:8,name:'XOOX Brewmill',cuisines:['Continental','North Indian','Beverages'],rating:3.9,cost:1200,similarity:71.7,votes:3432},
+  {rank:9,name:'ANTIGRAVITY',cuisines:['North Indian','Continental','Chinese'],rating:4.0,cost:800,similarity:68.4,votes:1893},
+  {rank:10,name:'Cafe Azzure',cuisines:['North Indian','Continental'],rating:4.1,cost:1000,similarity:65.1,votes:2341},
+];
+let srCurrentData=[...SR_DATA];
+
+function srRatingColor(r){return r>=4.3?'#059669':r>=4.0?'#D97706':'#DC2626'}
+function srSimColor(s){return s>=90?'#4F46E5':s>=75?'#7C3AED':'#0891B2'}
+
+function srRenderChart(data){
+  const chart=document.getElementById('sr-bar-chart');
+  chart.innerHTML='';
+  const maxH=96,minD=50;
+  data.forEach((r,i)=>{
+    const pct=((r.similarity-minD)/(100-minD))*100;
+    const barH=Math.max(4,(pct/100)*maxH);
+    const short=r.name.length>12?r.name.slice(0,12)+'…':r.name;
+    const col=document.createElement('div');
+    col.className='sr-bar-col';
+    col.innerHTML=`<div class="sr-bar-fill" style="height:${barH}px;background:${SR_BAR_COLORS[i]||'#A8A0F6'}" title="${r.name}: ${r.similarity}%"></div><div class="sr-bar-lbl">${short}</div>`;
+    chart.appendChild(col);
+  });
+  setTimeout(()=>{chart.querySelectorAll('.sr-bar-fill').forEach((el,i)=>{setTimeout(()=>el.classList.add('in'),i*60)});},80);
+}
+
+function srRenderCuisines(data){
+  const all=[...new Set(data.flatMap(r=>r.cuisines))].slice(0,10);
+  document.getElementById('sr-cuisine-chips').innerHTML=all.map((c,i)=>
+    `<span style="padding:2px 8px;border-radius:8px;color:#4F46E5;border:1px solid #E0E7FF;font-size:11px;font-weight:600;background:${i%2===0?'#EEF2FF':'#F5F3FF'}">${c}</span>`
+  ).join('');
+}
+
+function srRenderCards(data){
+  const wrap=document.getElementById('sr-cards');
+  wrap.innerHTML='';
+  data.forEach((r,i)=>{
+    const rs=SR_RANK_STYLES[r.rank]||{bg:'#EEF2FF',text:'#4F46E5',border:'#C7D2FE'};
+    const rc=srRatingColor(r.rating),sc=srSimColor(r.similarity);
+    const cuisinesHtml=r.cuisines.map(c=>`<span class="sr-ccchip">${c}</span>`).join('');
+    const delay=i*.05;
+    const card=document.createElement('div');
+    card.className='sr-rcard';
+    card.style.transitionDelay=delay+'s';
+    card.innerHTML=`
+      <div style="flex-shrink:0;padding-top:2px">
+        <div class="sr-rank-badge" style="background:${rs.bg};border:1.5px solid ${rs.border};color:${rs.text}">${String(r.rank).padStart(2,'0')}</div>
+      </div>
+      <div class="sr-rcard-body">
+        <div class="sr-rcard-top">
+          <div>
+            <div class="sr-rcard-name">${r.name}</div>
+            <div class="sr-rcard-loc">📍 <span>Bangalore</span></div>
+          </div>
+          <div class="sr-rcard-sim">
+            <div class="sr-sim-num" style="color:${sc}">${r.similarity}%</div>
+            <div class="sr-sim-lbl">Match Score</div>
+          </div>
+        </div>
+        <div class="sr-cuisines">${cuisinesHtml}</div>
+        <div class="sr-sim-track">
+          <div class="sr-sim-bar" style="width:${r.similarity}%;background:linear-gradient(90deg,${sc},${sc}99);transition-delay:${delay+.3}s"></div>
+        </div>
+        <div class="sr-rcard-footer">
+          <div style="display:flex;align-items:center;gap:5px">
+            <div class="sr-rating-pill" style="background:${rc}15;border:1px solid ${rc}25">
+              <span style="font-size:11px;color:${rc}">★</span>
+              <span style="font-size:12px;font-weight:700;color:${rc}">${r.rating}</span>
+            </div>
+            <span style="font-size:11px;color:#94A3B8">Mean Rating</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:3px">
+            <span style="font-size:11px;color:#94A3B8">#</span>
+            <span style="font-size:12px;font-weight:600;color:#64748B">${r.votes.toLocaleString()}</span>
+            <span style="font-size:11px;color:#94A3B8">votes</span>
+          </div>
+          <div class="sr-cost-pill">₹${r.cost.toLocaleString()}<span style="font-size:10px;color:#6EE7B7;margin-left:1px">/2</span></div>
+          <div class="sr-rcard-arrow">↗</div>
+        </div>
+      </div>`;
+    wrap.appendChild(card);
+    setTimeout(()=>card.classList.add('in'),80+i*60);
+  });
+}
+
+function srSort(btn,key){
+  document.querySelectorAll('.sr-sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let sorted=[...srCurrentData];
+  switch(key){
+    case'similarity':sorted.sort((a,b)=>b.similarity-a.similarity);break;
+    case'rating-desc':sorted.sort((a,b)=>b.rating-a.rating);break;
+    case'rating-asc':sorted.sort((a,b)=>a.rating-b.rating);break;
+    case'cost-asc':sorted.sort((a,b)=>a.cost-b.cost);break;
+    case'cost-desc':sorted.sort((a,b)=>b.cost-a.cost);break;
+  }
+  const labels={'similarity':'cosine similarity','rating-desc':'Rating ↓','rating-asc':'Rating ↑','cost-asc':'Cost ↑','cost-desc':'Cost ↓'};
+  document.getElementById('sr-meta').textContent=`Sorted by ${labels[key]} · 160ms · TF-IDF Model v2.4 · 10 / 12,487 venues`;
+  srRenderCards(sorted);
+  srRenderChart(sorted);
+}
+
+let srInitialised=false;
+function openSampleModal(){
+  const overlay=document.getElementById('sr-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  if(!srInitialised){
+    srInitialised=true;
+    srCurrentData=[...SR_DATA];
+    srRenderChart(srCurrentData);
+    srRenderCuisines(srCurrentData);
+    srRenderCards(srCurrentData);
+  }
+}
+function closeSampleModal(){
+  document.getElementById('sr-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  // Close only if clicking the dark backdrop itself, not inner content
+  if(e.target===document.getElementById('sr-overlay'))closeSampleModal();
+}
+// Keyboard ESC to close
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSampleModal()});
+</script>
+</body>
+</html>

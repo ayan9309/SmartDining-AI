@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inference Engine — SmartDining AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="search-page">
+
+<div class="ambient"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">✦</div>
+      <div class="nav-logo-name">
+        <span class="nav-logo-text">SmartDining</span>
+        <span class="nav-logo-ai">AI</span>
+      </div>
+      <span class="nav-page-pill">› Inference Engine</span>
+    </a>
+    <div class="nav-center">
+      <a class="nav-item" href="/">🏠 Home</a>
+      <a class="nav-item" href="/#howitworks">🧠 How It Works</a>
+      <a class="nav-item" href="#" id="demo-link">📊 View Demo</a>
+    </div>
+    <div class="nav-right"></div>
+  </div>
+</nav>
+
+<main class="search-main">
+
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-active">Inference Engine</span>
+  </div>
+
+  <div class="page-header">
+    <div class="brain-icon">🧠</div>
+    <h1 class="page-title">Inference Engine</h1>
+    <p class="page-sub">Enter a target restaurant to compute vector similarity across <strong>12,487 venues</strong> using TF-IDF + Cosine Similarity.</p>
+  </div>
+
+  <div class="search-container">
+    <div class="search-wrap" id="sw">
+      <div class="search-bar" id="sb">
+        <div class="search-icon-wrap"><span class="search-icon" id="si">🔍</span></div>
+        <input id="search-input" type="text" placeholder="e.g., Jalsa, Onesta, The Fatty Bao..." autocomplete="off" spellcheck="false"/>
+        <button class="clear-btn" id="cb" title="Clear">✕</button>
+        <!-- <div class="kbd-hint" id="kh"><span>↵</span> Enter</div> -->
+      </div>
+    </div>
+   <form action="/result" method="POST" id="infer-form">
+      <input type="hidden" name="output" id="fo"/>
+      <button type="submit" id="run-btn" disabled>⚡ Run Inference →</button>
+    </form>
+  </div>
+
+  <div class="popular-wrap">
+    <p class="popular-lbl">Popular Targets</p>
+    <div class="popular-chips">
+      <button class="pop-chip" onclick="quickRun('Jalsa')">Jalsa</button>
+      <button class="pop-chip" onclick="quickRun('Onesta')">Onesta</button>
+      <button class="pop-chip" onclick="quickRun('MTR')">MTR</button>
+      <button class="pop-chip" onclick="quickRun('Karavalli')">Karavalli</button>
+      <button class="pop-chip" onclick="quickRun('Toit')">Toit</button>
+      <button class="pop-chip" onclick="quickRun('The Fatty Bao')">The Fatty Bao</button>
+      <button class="pop-chip" onclick="quickRun('Truffles')">Truffles</button>
+      <button class="pop-chip" onclick="quickRun('Barbeque Nation')">Barbeque Nation</button>
+    </div>
+  </div>
+
+  <div class="model-badges">
+    <div class="model-badge"><span class="mb-key">Vectorizer:</span><span class="mb-val">TF-IDF</span></div>
+    <div class="model-badge"><span class="mb-key">Distance Metric:</span><span class="mb-val">Cosine Similarity</span></div>
+    <div class="model-badge"><span class="mb-key">Corpus Size:</span><span class="mb-val">12,487 venues</span></div>
+    <div class="model-badge"><span class="mb-key">Top-K:</span><span class="mb-val">10 results</span></div>
+  </div>
+
+</main>
+
+<div class="dropdown" id="dd">
+  <div class="dd-section" id="dd-lbl"><span>✨</span><span>Popular Targets</span></div>
+  <div id="dd-items"></div>
+  <div class="dd-footer-row">
+    <div class="kbd-row">
+      <span><kbd>↑↓</kbd> Navigate</span>
+      <span><kbd>↵</kbd> Select</span>
+      <span><kbd>Esc</kbd> Close</span>
+    </div>
+    <span class="dd-corpus">12,487 venues indexed</span>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="fc-left">
+      <span class="fc-logo">✦ SmartDining <b>AI</b></span>
+      <span class="fc-tech">Flask · scikit-learn · Zomato Dataset</span>
+    </div>
+    <div class="fc-right">
+      <span class="fc-dev">
+        Designed & Developed by 
+        <a href="#" target="_blank">Mohamadayan Desai</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════════════════════════════ */
+const RESTAURANTS=[
+  {name:'Jalsa',cuisine:'North Indian, Mughlai, Biryani',area:'Jubilee Hills',rating:4.3,cost:800},
+  {name:'Punjab Grill',cuisine:'North Indian, Punjabi, Vegetarian',area:'Vittal Mallya Road',rating:4.1,cost:1400},
+  {name:'Barbeque Nation',cuisine:'North Indian, Barbecue, Kebab',area:'Multiple Locations',rating:4.1,cost:1200},
+  {name:'Onesta',cuisine:'Italian, Pizza, Continental',area:'Koramangala',rating:4.5,cost:600},
+  {name:'Toscano',cuisine:'Italian, Mediterranean, Continental',area:'UB City',rating:4.2,cost:1500},
+  {name:'Smoke House Deli',cuisine:'Continental, European, Beverages',area:'Khan Market',rating:4.4,cost:1100},
+  {name:'The Fatty Bao',cuisine:'Asian Fusion, Japanese, Burmese',area:'Indiranagar',rating:4.3,cost:900},
+  {name:'Shiro',cuisine:'Asian, Japanese, Chinese',area:'UB City',rating:4.3,cost:1600},
+  {name:'Toit',cuisine:'Continental, North Indian, Craft Beer',area:'Indiranagar',rating:4.3,cost:1200},
+  {name:'Truffles',cuisine:'American, Burgers, Italian',area:'Koramangala',rating:4.4,cost:600},
+  {name:'MTR',cuisine:'South Indian, Breakfast, Karnataka',area:'Lalbagh Road',rating:4.5,cost:250},
+  {name:'CTR',cuisine:'South Indian, Breakfast, Karnataka',area:'Malleswaram',rating:4.4,cost:200},
+  {name:'Vidyarthi Bhavan',cuisine:'South Indian, Breakfast, Karnataka',area:'Gandhi Bazaar',rating:4.4,cost:150},
+  {name:'Rameshwaram Cafe',cuisine:'South Indian, Breakfast, Traditional',area:'Indiranagar',rating:4.6,cost:300},
+  {name:'Karavalli',cuisine:'Coastal, Seafood, Kerala, Karnataka',area:'Residency Road',rating:4.6,cost:1500},
+  {name:'Corner House',cuisine:'Ice Cream, Desserts, Cafe',area:'Multiple Locations',rating:4.5,cost:250},
+  {name:'Empire Restaurant',cuisine:'North Indian, Chinese, Biryani',area:'Church Street',rating:4.0,cost:350},
+  {name:'Meghana Foods',cuisine:'Andhra, Biryani, South Indian',area:'Koramangala',rating:4.5,cost:450},
+  {name:'Social',cuisine:'Continental, Asian, Beverages',area:'Koramangala',rating:4.0,cost:800},
+  {name:'Olive Bar & Kitchen',cuisine:'Mediterranean, Italian, Continental',area:'Bandra West',rating:4.2,cost:2000},
+  {name:'Windmills Craftworks',cuisine:'Continental, Craft Beer, Pizza',area:'Whitefield',rating:4.3,cost:1200},
+  {name:'Bayroute',cuisine:'Lebanese, Mediterranean, Seafood',area:'Juhu',rating:4.5,cost:1800},
+  {name:'Wasabi by Morimoto',cuisine:'Japanese, Sushi, Asian Fusion',area:'Colaba',rating:4.7,cost:5000},
+  {name:'Red Chilliez',cuisine:'North Indian, Chinese',area:'Koramangala',rating:4.0,cost:700},
+  {name:'Cinnamon',cuisine:'Continental, Bakery',area:'Indiranagar',rating:4.1,cost:600},
+  {name:'Spice Up',cuisine:'North Indian, Chinese',area:'Whitefield',rating:3.9,cost:500},
+  {name:'Desi Doze',cuisine:'North Indian, Rajasthani',area:'Koramangala',rating:4.0,cost:600},
+];
+const POPULAR=['Jalsa','Onesta','Karavalli','The Fatty Bao','MTR','Rameshwaram Cafe','Toit','Barbeque Nation'];
+const RECENT=['Onesta','Karavalli','Punjab Grill'];
+
+/* ════════════════════════════════════════════════════════════════════
+   ELEMENTS
+════════════════════════════════════════════════════════════════════ */
+const inp = document.getElementById('search-input');
+const sw  = document.getElementById('sw');
+const sb  = document.getElementById('sb');
+const dd  = document.getElementById('dd');
+const ddItems = document.getElementById('dd-items');
+const ddLbl   = document.getElementById('dd-lbl');
+const cb  = document.getElementById('cb');
+const kh  = document.getElementById('kh');
+const runBtn  = document.getElementById('run-btn');
+const fo  = document.getElementById('fo');
+
+/* ════════════════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════════════════ */
+let activeIdx = -1;   // which item is highlighted (-1 = none)
+let curItems  = [];   // flat ordered list of navigable items [{name}]
+let curMode   = 'empty'; // 'empty' | 'search'
+let ddOpen    = false;
+
+/* ════════════════════════════════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════════════════════════════════ */
+function stars(r){
+  let s='';
+  for(let i=1;i<=5;i++) s+=`<span class="${i<=Math.round(r)?'':'e'}">★</span>`;
+  return s;
+}
+
+/* Position the fixed dropdown to sit flush below the search bar */
+function positionDD(){
+  const rect = sb.getBoundingClientRect();
+  dd.style.left  = rect.left + 'px';
+  dd.style.width = rect.width + 'px';
+  dd.style.top   = (rect.bottom - 1) + 'px'; /* -1 so border overlaps cleanly */
+  /* ── Dynamic maxHeight: never let the dropdown overflow the viewport bottom ── */
+  const available = window.innerHeight - rect.bottom - 16; /* 16px breathing room */
+  dd.style.maxHeight = Math.max(available, 180) + 'px';    /* never below 180px  */
+}
+
+/* Highlight active item, clear all others, and scroll it into view */
+function highlight(idx){
+  activeIdx = idx;
+  const allItems = document.querySelectorAll('.dd-item, .dd-simple-item');
+  allItems.forEach((el, j) => el.classList.toggle('active', j === idx));
+  /* Scroll the newly highlighted element into view inside the dropdown */
+  if(idx >= 0 && allItems[idx]){
+    allItems[idx].scrollIntoView({ block:'nearest', behavior:'smooth' });
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   RENDER EMPTY STATE  (Recent Searches + Popular Targets)
+════════════════════════════════════════════════════════════════════ */
+function renderEmptyState(){
+  ddLbl.innerHTML = '<span>🕐</span><span>Recent Searches</span>';
+  ddItems.innerHTML = '';
+  curMode = 'empty';
+  curItems = [];
+
+  /* Recent Searches */
+  RECENT.forEach(name => {
+    const el = document.createElement('button');
+    el.className = 'dd-simple-item';
+    el.innerHTML = `<div class="dd-simple-icon" style="background:#F1F5F9;color:#94A3B8">🕐</div>
+                    <span class="dd-simple-name">${name}</span>`;
+    el.addEventListener('mousedown', e => { e.preventDefault(); fillInput(name); });
+    ddItems.appendChild(el);
+    curItems.push({ name });
+  });
+
+  /* Divider */
+  const div = document.createElement('div');
+  div.className = 'dd-divider';
+  ddItems.appendChild(div);
+
+  /* Popular Targets header */
+  const hdr = document.createElement('div');
+  hdr.className = 'dd-section';
+  hdr.style.paddingTop = '8px';
+  hdr.innerHTML = '<span style="color:#818CF8">✨</span><span>Popular Targets</span>';
+  ddItems.appendChild(hdr);
+
+  /* Popular items */
+  POPULAR.slice(0, 5).forEach(name => {
+    const el = document.createElement('button');
+    el.className = 'dd-simple-item';
+    el.innerHTML = `<div class="dd-simple-icon" style="background:#EEF2FF;color:#818CF8">✨</div>
+                    <span class="dd-simple-name">${name}</span>`;
+    el.addEventListener('mousedown', e => { e.preventDefault(); fillInput(name); });
+    ddItems.appendChild(el);
+    curItems.push({ name });
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   RENDER TYPED SUGGESTIONS  (full cards)
+════════════════════════════════════════════════════════════════════ */
+function renderSuggestions(items){
+  ddLbl.innerHTML = '<span>🔍</span><span>Matching Restaurants</span>';
+  ddItems.innerHTML = '';
+  curMode = 'search';
+  curItems = items;
+
+  items.forEach(r => {
+    const el = document.createElement('button');
+    el.className = 'dd-item';
+    el.innerHTML = `
+      <div class="dd-item-icon">🔍</div>
+      <div class="dd-item-body">
+        <div class="dd-item-name">${r.name}<span class="dd-item-area">${r.area}</span></div>
+        <div class="dd-item-cuisine">${r.cuisine}</div>
+      </div>
+      <div class="dd-item-right">
+        <div class="dd-stars">${stars(r.rating)}</div>
+        <div class="dd-meta">
+          <span class="dd-rating">${r.rating}</span>
+          <span style="color:#CBD5E1">·</span>
+          <span class="dd-cost">₹${r.cost.toLocaleString()}</span>
+        </div>
+      </div>`;
+    /* mousedown prevents blur before click fires */
+    el.addEventListener('mousedown', e => { e.preventDefault(); runInferenceFor(r.name); });
+    ddItems.appendChild(el);
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   OPEN / CLOSE
+════════════════════════════════════════════════════════════════════ */
+function openDD(){
+  const q = inp.value.trim().toLowerCase();
+  if(!q){
+    renderEmptyState();
+  } else {
+    const matches = RESTAURANTS.filter(r =>
+      r.name.toLowerCase().includes(q) || r.cuisine.toLowerCase().includes(q)
+    ).slice(0, 7);
+    if(!matches.length){ closeDD(); return; }
+    renderSuggestions(matches);
+  }
+  activeIdx = -1;
+  positionDD();
+  dd.classList.add('open');
+  sb.classList.add('open', 'focused');
+  ddOpen = true;
+}
+
+function closeDD(){
+  dd.classList.remove('open');
+  sb.classList.remove('open', 'focused');
+  ddOpen = false;
+  activeIdx = -1;
+  /* Remove focused border glow when closed AND no value typed */
+  if(!inp.value.trim()) sb.classList.remove('focused');
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   ACTIONS
+════════════════════════════════════════════════════════════════════ */
+/* Fill input with name, close dropdown, activate run button */
+function fillInput(name){
+  inp.value = name;
+  closeDD();
+  updateState();
+  inp.focus();
+}
+
+/* Immediately submit inference */
+function runInferenceFor(name){
+  inp.value = name;
+  fo.value  = name;
+  document.getElementById('infer-form').submit();
+}
+
+function updateState(){
+  const q = inp.value.trim();
+  
+  // Safe checks in case you remove elements from HTML later!
+  if(cb) cb.style.display = q ? 'flex' : 'none';
+  if(kh) kh.style.display = q ? 'none' : 'flex'; 
+  
+  if(q){ 
+    runBtn.classList.add('active');
+    runBtn.disabled = false; // Turn button ON
+    fo.value = q; 
+  } else { 
+    runBtn.classList.remove('active'); 
+    runBtn.disabled = true;  // Turn button OFF
+    fo.value = ''; 
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   EVENT LISTENERS
+════════════════════════════════════════════════════════════════════ */
+inp.addEventListener('focus', () => {
+  sb.classList.add('focused');
+  openDD();
+});
+
+inp.addEventListener('blur', () => {
+  /* Small delay so mousedown on a dd-item fires before we close */
+  setTimeout(() => {
+    closeDD();
+    if(!inp.value.trim()) sb.classList.remove('focused');
+  }, 150);
+});
+
+inp.addEventListener('input', () => {
+  openDD();
+  updateState();
+});
+
+cb.addEventListener('click', () => {
+  inp.value = '';
+  updateState();
+  closeDD();
+  inp.focus();
+});
+
+/* ════════════════════════════════════════════════════════════════════
+   KEYBOARD NAVIGATION — clean, no state confusion
+   Logic:
+     ArrowDown/Up  → move highlight within open dropdown
+     Enter (dd open + item highlighted) → select that item
+     Enter (dd open + nothing highlighted) → submit whatever is in input
+     Enter (dd closed) → submit whatever is in input
+     Escape → close dropdown
+════════════════════════════════════════════════════════════════════ */
+inp.addEventListener('keydown', e => {
+  if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    if(!ddOpen) openDD();
+    const newIdx = Math.min(activeIdx + 1, curItems.length - 1);
+    highlight(newIdx);
+    return;
+  }
+
+  if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    const newIdx = Math.max(activeIdx - 1, -1);
+    highlight(newIdx);
+    return;
+  }
+
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    if(ddOpen && activeIdx >= 0 && curItems[activeIdx]){
+      /* An item is highlighted: select it */
+      const name = curItems[activeIdx].name;
+      if(curMode === 'search'){
+        runInferenceFor(name); /* typed suggestion → run immediately */
+      } else {
+        fillInput(name);       /* recent/popular  → fill input, close dd */
+        /* After fillInput, the input now has a value and the run button is active.
+           The user pressing Enter again will fall through to the submit branch below */
+      }
+    } else {
+      /* No item highlighted, or dropdown closed → submit whatever is typed */
+      const q = inp.value.trim();
+      if(q){ fo.value = q; document.getElementById('infer-form').submit(); }
+    }
+    return;
+  }
+
+  if(e.key === 'Escape'){
+    closeDD();
+    return;
+  }
+});
+
+/* Close on outside click */
+document.addEventListener('mousedown', e => {
+  if(!sw.contains(e.target) && !dd.contains(e.target)) closeDD();
+});
+
+/* Reposition fixed dropdown when window resizes or scrolls */
+window.addEventListener('resize',  () => { if(ddOpen) positionDD(); });
+window.addEventListener('scroll',  () => { if(ddOpen) positionDD(); }, { passive:true });
+
+/* Form submit guard */
+document.getElementById('infer-form').addEventListener('submit', e => {
+  const q = inp.value.trim();
+  if(!q){ e.preventDefault(); return; }
+  fo.value = q;
+});
+
+/* Quick run from chips */
+function quickRun(name){
+  inp.value = name;
+  updateState();
+  fo.value = name;
+  document.getElementById('infer-form').submit();
+}
+
+/* View Demo → run Jalsa */
+document.getElementById('demo-link').addEventListener('click', e => {
+  e.preventDefault();
+  quickRun('Jalsa');
+});
+
+/* ════════════════════════════════════════════════════════════════════
+   FLASK /autocomplete integration (optional — only fires if endpoint exists)
+   Falls back gracefully with zero console errors if endpoint is absent.
+════════════════════════════════════════════════════════════════════ */
+$(function(){
+  $('#search-input').on('input', function(){
+    const term = $(this).val().trim();
+    if(!term) return;
+    $.ajax({
+      url:'/autocomplete', data:{term}, timeout:800,
+      success: function(data){
+        /* Only use server results if our local search found nothing */
+        const q = inp.value.trim().toLowerCase();
+        const localHits = RESTAURANTS.filter(r =>
+          r.name.toLowerCase().includes(q) || r.cuisine.toLowerCase().includes(q)
+        );
+        if(!localHits.length && data && data.length){
+          /* Build minimal entries for server-only matches */
+          const serverItems = data.slice(0,7).map(name => ({
+            name, cuisine:'', area:'', rating:0, cost:0
+          }));
+          renderSuggestions(serverItems);
+          positionDD();
+          dd.classList.add('open');
+          ddOpen = true;
+        }
+      },
+      error: function(){}  /* Silently ignore if /autocomplete doesn't exist */
+    });
+  });
+});
+</script>
+</body>
+</html>
