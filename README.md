@@ -93,6 +93,6 @@ http://127.0.0.1:5000/
 * **Data Presentation:** The backend normalizes the mathematical data and renders it dynamically into a clean, modern HTML/CSS dashboard with interactive charts.
 
 ##   📝 License & Credits
-This project is developed for educational purposes as part of the SmartInternz Artificial Intelligence Internship Program.
+This project is developed for educational purposes as part of the SmartInternz Applied Data Science Internship Program.
 
 **Designed & Developed by Mohamadayan Desai**
